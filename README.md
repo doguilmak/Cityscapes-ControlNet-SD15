@@ -54,7 +54,7 @@ conda activate controlnet-env
 
 Training involves fine-tuning only the ControlNet-specific parameters while keeping the core Stable Diffusion components frozen. This approach allows the model to learn how to condition image generation on segmentation maps without altering the pre-trained generative capacity of the base model. The paired Cityscapes dataset (RGB image and segmentation map) provides strong spatial structure, making it ideal for tasks like urban scene synthesis. The training process leverages a simple noise prediction objective in the diffusion framework, enabling controllable and high-fidelity image outputs aligned with semantic layouts.
 
--   **Data**: Each input image $x_0$ is paired with a segmentation map $c$, resized to $512\times512$, normalized to $[-1, 1]$.
+-   **Data**: Each input image $x_0$ is paired with a segmentation map $c$, resized to $256\times256$, normalized to $[-1, 1]$.
     
 -   **Model Setup**: Load `sd-controlnet-seg` and freeze Stable Diffusion components (text encoder, UNet, VAE). Trainable layers are in ControlNet only.
     
