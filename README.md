@@ -55,7 +55,7 @@ conda activate controlnet-env
 Training involves fine-tuning only the ControlNet-specific parameters while keeping the core Stable Diffusion components frozen. This approach allows the model to learn how to condition image generation on segmentation maps without altering the pre-trained generative capacity of the base model. The paired Cityscapes dataset (RGB image and segmentation map) provides strong spatial structure, making it ideal for tasks like urban scene synthesis. The training process leverages a simple noise prediction objective in the diffusion framework, enabling controllable and high-fidelity image outputs aligned with semantic layouts.
 
 ### 📄 **Usage Guide**:  
-To quickly get started with the model and see how it works in action, refer to the [**`Usage.ipynb`**](Usage.ipynb) notebook. This notebook provides an easy-to-follow walkthrough for using the trained model for segmentation-guided image generation. It covers everything from loading the model to performing inference and generating high-quality images based on input segmentation maps. You can easily run the notebook to see how the model performs and make adjustments as needed.
+To quickly get started with the model and see how it works in action, refer to the [**`Usage.ipynb`**](/usage/Usage.ipynb) notebook. This notebook provides an easy-to-follow walkthrough for using the trained model for segmentation-guided image generation. It covers everything from loading the model to performing inference and generating high-quality images based on input segmentation maps. You can easily run the notebook to see how the model performs and make adjustments as needed.
 
 -   **Data**: Each input image $x_0$ is paired with a segmentation map $c$, resized to $512\times512$, normalized to $[-1, 1]$.
     
@@ -152,7 +152,7 @@ Epoch 50 Samples
 
 Inference Result
 
-![Inference](assets/inference.png)
+![Inference](/usage/inference.png)
 
 <br>
 
