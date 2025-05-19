@@ -54,9 +54,6 @@ conda activate controlnet-env
 
 Training involves fine-tuning only the ControlNet-specific parameters while keeping the core Stable Diffusion components frozen. This approach allows the model to learn how to condition image generation on segmentation maps without altering the pre-trained generative capacity of the base model. The paired Cityscapes dataset (RGB image and segmentation map) provides strong spatial structure, making it ideal for tasks like urban scene synthesis. The training process leverages a simple noise prediction objective in the diffusion framework, enabling controllable and high-fidelity image outputs aligned with semantic layouts.
 
-### 📄 **Usage Guide**:  
-To quickly get started with the model and see how it works in action, refer to the [**`Usage.ipynb`**](/usage/Usage.ipynb) notebook. This notebook provides an easy-to-follow walkthrough for using the trained model for segmentation-guided image generation. It covers everything from loading the model to performing inference and generating high-quality images based on input segmentation maps. You can easily run the notebook to see how the model performs and make adjustments as needed.
-
 -   **Data**: Each input image $x_0$ is paired with a segmentation map $c$, resized to $512\times512$, normalized to $[-1, 1]$.
     
 -   **Model Setup**: Load `sd-controlnet-seg` and freeze Stable Diffusion components (text encoder, UNet, VAE). Trainable layers are in ControlNet only.
@@ -72,7 +69,10 @@ To quickly get started with the model and see how it works in action, refer to t
   The loss function is defined as the expected squared difference between the predicted noise $\epsilon_\theta$ and the actual noise $\epsilon$ at each time step $t$, conditioned on the input image $x_t$, segmentation map $c$, and any additional context $y$. The only parameters optimized during training are those of the ControlNet, denoted as $\theta$.
   
 -   **Checkpoints**: Saved every 5 epochs to `output/checkpoints/`, and exported as `full_pipeline/` at completion.
-    
+
+### 📄 **Usage Guide**:  
+To quickly get started with the model and see how it works in action, refer to the [**`Usage.ipynb`**](/usage/Usage.ipynb) notebook. This notebook provides an easy-to-follow walkthrough for using the trained model for segmentation-guided image generation. It covers everything from loading the model to performing inference and generating high-quality images based on input segmentation maps. You can easily run the notebook to see how the model performs and make adjustments as needed.
+
 <br>
 
 ### 2. Sampling & Inference
