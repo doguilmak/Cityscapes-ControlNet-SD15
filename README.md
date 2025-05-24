@@ -1,5 +1,5 @@
 
-# Controlled Image Generation with Stable Diffusion & ControlNet
+![Inference](/assets/cover.png)
 
 This repository provides a comprehensive and reproducible pipeline for training, fine-tuning, and deploying a **ControlNet-augmented Stable Diffusion** model, specifically designed for **semantic segmentation–conditioned image synthesis**. Leveraging the **Cityscapes dataset**, the pipeline enables precise control over the image generation process by conditioning on structured scene layouts. It builds upon the publicly available [lllyasviel/sd-controlnet-seg](https://huggingface.co/lllyasviel/sd-controlnet-seg) checkpoint and implements the ControlNet framework proposed in [*Adding Conditional Control to Text-to-Image Diffusion Models*](https://arxiv.org/abs/2302.05543). By integrating segmentation masks as control signals, this setup facilitates high-resolution, photorealistic generation of complex urban environments with semantic alignment and spatial consistency. This work aims to serve both as a foundation for further research in controllable generative models and as a practical tool for urban scene synthesis.
 
@@ -148,7 +148,7 @@ output.images[0].save("output/inference.png")
 
 ## 📸 Sample Outputs
 
-Epoch 50 Samples
+These examples illustrate the model’s ability to generate photorealistic urban scenes guided by semantic segmentation maps. The outputs demonstrate strong spatial alignment between the input masks and the synthesized content, capturing realistic lighting, structure, and urban textures.
 
 ![Epoch 50](/samples/samples_50.png)
 
@@ -170,6 +170,6 @@ Inference Result
 
 ## 📖 References
 
--   [lllyasviel/sd-controlnet-seg](https://huggingface.co/lllyasviel/sd-controlnet-seg)
+-   [Stable diffusion ControlNet segmentation HuggingFace page.](https://huggingface.co/lllyasviel/sd-controlnet-seg)
     
 -   Y. Zhao _et al._, “Adding Conditional Control to Text-to-Image Diffusion Models,” [arXiv:2302.05543](https://arxiv.org/abs/2302.05543)
