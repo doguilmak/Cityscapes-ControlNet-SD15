@@ -110,13 +110,6 @@ The model is optimized using a simple noise prediction objective from the diffus
 
 <br>
 
-### 📄 **Usage Guide**  
-To quickly get started with the model and see how it works in action, refer to the [**`Usage.ipynb`**](/usage/Usage.ipynb) notebook. This notebook provides an easy-to-follow walkthrough for using the trained model for segmentation-guided image generation. It covers everything from loading the model to performing inference and generating high-quality images based on input segmentation maps. You can easily run the notebook to see how the model performs and make adjustments as needed.
-
-In addition, you can find the **Cityscapes dataset color codes** for building your own input images and generating scenes [here](https://docs.cvat.ai/docs/manual/advanced/formats/format-cityscapes/).
-
-<br>
-
 ### 2. Sampling & Inference
 
 After training, use the `full_pipeline/` to perform segmentation-guided generation. For reproducible sampling, seed PyTorch and CUDA:
@@ -175,6 +168,11 @@ output = pipeline(
 )
 output.images[0].save("output/inference.png")
 ```
+
+### 📄 **Usage Guide**  
+To quickly get started with the model and see how it works in action, refer to the [**`Usage.ipynb`**](/usage/Usage.ipynb) notebook. This notebook provides an easy-to-follow walkthrough for using the trained model for segmentation-guided image generation. It covers everything from loading the model to performing inference and generating high-quality images based on input segmentation maps. You can easily run the notebook to see how the model performs and make adjustments as needed.
+
+In addition, you can find the **Cityscapes dataset color codes** for building your own input images and generating scenes [here](https://docs.cvat.ai/docs/manual/advanced/formats/format-cityscapes/).
 
 **Tips**:
 
