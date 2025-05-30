@@ -48,29 +48,69 @@ conda activate controlnet-env
 
 <br>
 
+
 ## 🚀 Usage Overview
 
 ### 1. Training (Fine-tuning ControlNet)
 
-Training involves fine-tuning only the ControlNet-specific parameters while keeping the core Stable Diffusion components frozen. This approach allows the model to learn how to condition image generation on segmentation maps without altering the pre-trained generative capacity of the base model. The paired Cityscapes dataset (RGB image and segmentation map) provides strong spatial structure, making it ideal for tasks like urban scene synthesis. The training process leverages a simple noise prediction objective in the diffusion framework, enabling controllable and high-fidelity image outputs aligned with semantic layouts.
+Training involves fine-tuning only the **ControlNet-specific parameters**, while keeping the core Stable Diffusion components (**text encoder, UNet, VAE**) frozen. This design allows the model to learn how to control image generation via semantic segmentation maps without disrupting the pretrained generative capacity of the base model.
 
--   **Data**: Each input image $x_0$ is paired with a segmentation map $c$, resized to $256\times256$, normalized to $[-1, 1]$.
-    
--   **Model Setup**: Load `sd-controlnet-seg` and freeze Stable Diffusion components (text encoder, UNet, VAE). Trainable layers are in ControlNet only.
-    
-- **Optimization**: AdamW optimizer with a learning rate of $1 \times 10^{-5}$, batch size 32, over 50 epochs (3475 samples), trained on an NVIDIA A100 40GB GPU (~2 hrs).
-    
-- **Noise Schedule**: Linear $\beta$ schedule from $\beta_1 = 0.0001$ to $\beta_T = 0.02$.
-    
+The training is performed on the **Cityscapes dataset**, where each image is paired with its corresponding segmentation mask. These pairs provide strong spatial structure for guiding controllable synthesis of complex urban scenes.
+
+The model is optimized using a simple noise prediction objective from the diffusion framework, aiming to learn the mapping from segmentation-guided latent noise to clean latent image representations.
+
+#### 🧾 Training Details
+
+- **Data**:  
+  Each RGB image $x_0$ is paired with a segmentation map $c$. Both are resized to $256 \times 256$ and normalized to the $[-1, 1]$ range, using the following transformation:
+
+  <p align="center">
+      <img src="https://quicklatex.com/cache3/17/ql_c6e5f5931464c654a08192ba803aeb17_l3.png" alt="Normalization formula">
+  </p>
+
+- **Model Setup**:  
+  The pipeline is initialized using the `sd-controlnet-seg` checkpoint. All core components of Stable Diffusion (VAE, UNet, and text encoder) are frozen during training. Only the ControlNet layers are trainable.
+
+- **Noise Schedule**:  
+  A **linear β-schedule** is used with:
+
+  <p align="center">
+      <img src="https://quicklatex.com/cache3/de/ql_22ba62b963482b4bf42f2301467e9bde_l3.png" alt="Normalization formula">
+  </p>
+
 - **Noise Modeling**:  
-  $x_t = \sqrt{\alpha_t} \, x_0 + \sqrt{1 - \alpha_t} \, \epsilon, \quad \epsilon \sim \mathcal{N}(0, I)$
-     
-- **Loss Function**:  
-  The loss function is defined as the expected squared difference between the predicted noise $\epsilon_\theta$ and the actual noise $\epsilon$ at each time step $t$, conditioned on the input image $x_t$, segmentation map $c$, and any additional context $y$. The only parameters optimized during training are those of the ControlNet, denoted as $\theta$.
-  
--   **Checkpoints**: Saved every 5 epochs to `output/checkpoints/`, and exported as `full_pipeline/` at completion.
+  The model predicts added noise $\epsilon$ in the diffusion process, defined as:
 
-### 📄 **Usage Guide**:  
+  <p align="center">
+      <img src="https://quicklatex.com/cache3/cf/ql_a88fb8e1286e4469485772e48750d1cf_l3.png" alt="Normalization formula">
+  </p>
+
+- **Loss Function**:  
+  The training loss is the **Mean Squared Error (MSE)** between the predicted and actual noise at each timestep:
+
+  <p align="center">
+      <img src="https://quicklatex.com/cache3/ca/ql_5fadb370c243b362b47e6e21c163e7ca_l3.png" alt="Normalization formula">
+  </p>
+
+  where $\epsilon_\theta$ is the predicted noise, $\epsilon$ is the actual noise sampled from a standard normal distribution, and $\theta$ are the trainable parameters of ControlNet. The loss is normalized by the number of gradient accumulation steps.
+
+- **Optimization**:  
+  The model is optimized using the **AdamW optimizer** with a **learning rate of $3.38 \times 10^{-8}$**. Training was performed with a **batch size of 32** and **gradient accumulation over 8 steps**, which effectively simulates a larger batch size of 256. Gradient clipping was applied with a **maximum norm of 1.0** to stabilize training. The model was trained for **50 epochs** using **3,475 image-mask pairs**, completing in approximately 2 hours on an **NVIDIA A100 40GB GPU**.
+
+- **Sampling Configuration during Evaluation**:
+  - **NUM_STEPS**: 50  
+    → Controls the number of denoising steps used during inference. More steps generally produce better quality.
+  - **GUIDANCE**: 9.0  
+    → Classifier-free guidance scale for balancing fidelity and diversity.
+
+- **Final Loss**:  
+  After 50 epochs of training, the final training loss reached $0.0201$
+  
+-   **Checkpoints**: Saved every 10 epochs to `output/checkpoints/`, and exported as `full_pipeline/` at completion.
+
+<br>
+
+### 📄 **Usage Guide**  
 To quickly get started with the model and see how it works in action, refer to the [**`Usage.ipynb`**](/usage/Usage.ipynb) notebook. This notebook provides an easy-to-follow walkthrough for using the trained model for segmentation-guided image generation. It covers everything from loading the model to performing inference and generating high-quality images based on input segmentation maps. You can easily run the notebook to see how the model performs and make adjustments as needed.
 
 In addition, you can find the **Cityscapes dataset color codes** for building your own input images and generating scenes [here](https://docs.cvat.ai/docs/manual/advanced/formats/format-cityscapes/).
