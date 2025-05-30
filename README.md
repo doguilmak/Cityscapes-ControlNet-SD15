@@ -104,7 +104,7 @@ The model is optimized using a simple noise prediction objective from the diffus
     → Classifier-free guidance scale for balancing fidelity and diversity.
 
 - **Final Loss**:  
-  After 50 epochs of training, the final training loss reached $0.0201$
+  After 50 epochs of training, the final training loss reached $0.0201$.
   
 -   **Checkpoints**: Saved every 10 epochs to `output/checkpoints/`, and exported as `full_pipeline/` at completion.
 
