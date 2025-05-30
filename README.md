@@ -65,7 +65,7 @@ The model is optimized using a simple noise prediction objective from the diffus
   Each RGB image $x_0$ is paired with a segmentation map $c$. Both are resized to $256 \times 256$ and normalized to the $[-1, 1]$ range, using the following transformation:
 
   <p align="center">
-      <img src="https://quicklatex.com/cache3/17/ql_c6e5f5931464c654a08192ba803aeb17_l3.png" alt="Normalization formula">
+      <img src="https://quicklatex.com/cache3/17/ql_c6e5f5931464c654a08192ba803aeb17_l3.png" alt="Normalization Formula">
   </p>
 
 - **Model Setup**:  
@@ -75,21 +75,21 @@ The model is optimized using a simple noise prediction objective from the diffus
   A **linear β-schedule** is used with:
 
   <p align="center">
-      <img src="https://quicklatex.com/cache3/de/ql_22ba62b963482b4bf42f2301467e9bde_l3.png" alt="Normalization formula">
+      <img src="https://quicklatex.com/cache3/de/ql_22ba62b963482b4bf42f2301467e9bde_l3.png" alt="Noise Schedule">
   </p>
 
 - **Noise Modeling**:  
   The model predicts added noise $\epsilon$ in the diffusion process, defined as:
 
   <p align="center">
-      <img src="https://quicklatex.com/cache3/cf/ql_a88fb8e1286e4469485772e48750d1cf_l3.png" alt="Normalization formula">
+      <img src="https://quicklatex.com/cache3/cf/ql_a88fb8e1286e4469485772e48750d1cf_l3.png" alt="Noise Modeling">
   </p>
 
 - **Loss Function**:  
   The training loss is the **Mean Squared Error (MSE)** between the predicted and actual noise at each timestep:
 
   <p align="center">
-      <img src="https://quicklatex.com/cache3/ca/ql_5fadb370c243b362b47e6e21c163e7ca_l3.png" alt="Normalization formula">
+      <img src="https://quicklatex.com/cache3/ca/ql_5fadb370c243b362b47e6e21c163e7ca_l3.png" alt="Loss Function">
   </p>
 
   where $\epsilon_\theta$ is the predicted noise, $\epsilon$ is the actual noise sampled from a standard normal distribution, and $\theta$ are the trainable parameters of ControlNet. The loss is normalized by the number of gradient accumulation steps.
