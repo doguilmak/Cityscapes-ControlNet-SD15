@@ -211,3 +211,5 @@ Inference Result
 -   [Stable diffusion ControlNet segmentation HuggingFace page.](https://huggingface.co/lllyasviel/sd-controlnet-seg)
     
 -   Y. Zhao _et al._, “Adding Conditional Control to Text-to-Image Diffusion Models,” [arXiv:2302.05543](https://arxiv.org/abs/2302.05543)
+
+-   [Can Michael Hucko's 'sar2rgb' Repository](https://github.com/canmike/sar2rgb)
