@@ -5,7 +5,7 @@ This repository provides a comprehensive and reproducible pipeline for training,
 
 <br>
 
-## 📂 Repository Structure
+## Repository Structure
 
 Clone the pretrained pipeline from Hugging Face:
 
@@ -31,7 +31,7 @@ cityscapes-controlnet-sd15/
 
 <br>
 
-## 🛠️ Installation
+## Installation
 
 ```bash
 git clone https://huggingface.co/doguilmak/cityscapes-controlnet-sd15
@@ -49,7 +49,7 @@ conda activate controlnet-env
 <br>
 
 
-## 🚀 Usage Overview
+## Usage Overview
 
 ### 1. Training (Fine-tuning ControlNet)
 
@@ -64,9 +64,9 @@ The model is optimized using a simple noise prediction objective from the diffus
 - **Data**:  
   Each RGB image $x_0$ is paired with a segmentation map $c$. Both are resized to $256 \times 256$ and normalized to the $[-1, 1]$ range, using the following transformation:
 
-  <p align="center">
-      <img src="https://quicklatex.com/cache3/17/ql_c6e5f5931464c654a08192ba803aeb17_l3.png" alt="Normalization Formula">
-  </p>
+$$
+x' = \frac{x}{127.5} - 1 \quad \text{where} \quad x \ \text{is the original pixel value in} \ [0, 255].
+$$
 
 - **Model Setup**:  
   The pipeline is initialized using the `sd-controlnet-seg` checkpoint. All core components of Stable Diffusion (VAE, UNet, and text encoder) are frozen during training. Only the ControlNet layers are trainable.
@@ -74,23 +74,23 @@ The model is optimized using a simple noise prediction objective from the diffus
 - **Noise Schedule**:  
   A **linear β-schedule** is used with:
 
-  <p align="center">
-      <img src="https://quicklatex.com/cache3/de/ql_22ba62b963482b4bf42f2301467e9bde_l3.png" alt="Noise Schedule">
-  </p>
+$$
+\beta_t = \beta_{\text{start}} + \frac{t}{T} (\beta_{\text{end}} - \beta_{\text{start}}) \quad \text{where} \quad \beta_{\text{start}} = 0.0001, \ \beta_{\text{end}} = 0.02, \ T = 1000 \ \text{(timesteps)}.
+$$
 
 - **Noise Modeling**:  
   The model predicts added noise $\epsilon$ in the diffusion process, defined as:
 
-  <p align="center">
-      <img src="https://quicklatex.com/cache3/cf/ql_a88fb8e1286e4469485772e48750d1cf_l3.png" alt="Noise Modeling">
-  </p>
+$$
+x_t = \sqrt{\bar{\alpha}_t} \, x_0 + \sqrt{1 - \bar{\alpha}_t} \, \epsilon \quad \text{where} \quad \epsilon \sim \mathcal{N}(0, \mathbf{I}), \ \bar{\alpha}_t = \prod_{s=1}^t (1 - \beta_s).
+$$
 
 - **Loss Function**:  
   The training loss is the **Mean Squared Error (MSE)** between the predicted and actual noise at each timestep:
 
-  <p align="center">
-      <img src="https://quicklatex.com/cache3/ca/ql_5fadb370c243b362b47e6e21c163e7ca_l3.png" alt="Loss Function">
-  </p>
+$$
+\mathcal{L} = \mathbb{E}_{t, x_0, \epsilon, c} \left[ \left\| \epsilon - \epsilon_\theta (x_t, t, c) \right\|^2 \right]
+$$
 
   where $\epsilon_\theta$ is the predicted noise, $\epsilon$ is the actual noise sampled from a standard normal distribution, and $\theta$ are the trainable parameters of ControlNet. The loss is normalized by the number of gradient accumulation steps.
 
@@ -169,7 +169,7 @@ output = pipeline(
 output.images[0].save("output/inference.png")
 ```
 
-### 📄 **Usage Guide**  
+### **Usage Guide**  
 To quickly get started with the model and see how it works in action, refer to the [**`Usage.ipynb`**](/usage/Usage.ipynb) notebook. This notebook provides an easy-to-follow walkthrough for using the trained model for segmentation-guided image generation. It covers everything from loading the model to performing inference and generating high-quality images based on input segmentation maps. You can easily run the notebook to see how the model performs and make adjustments as needed.
 
 In addition, you can find the **Cityscapes dataset color codes** for building your own input images and generating scenes [here](https://docs.cvat.ai/docs/manual/advanced/formats/format-cityscapes/).
@@ -184,7 +184,7 @@ In addition, you can find the **Cityscapes dataset color codes** for building yo
 
 <br>
 
-## 📸 Sample Outputs
+## Sample Outputs
 
 These examples illustrate the model’s ability to generate photorealistic urban scenes guided by semantic segmentation maps. The outputs demonstrate strong spatial alignment between the input masks and the synthesized content, capturing realistic lighting, structure, and urban textures.
 
@@ -206,10 +206,8 @@ Inference Result
 
 <br>
 
-## 📖 References
+## References
 
 -   [Stable diffusion ControlNet segmentation HuggingFace page.](https://huggingface.co/lllyasviel/sd-controlnet-seg)
     
 -   Y. Zhao _et al._, “Adding Conditional Control to Text-to-Image Diffusion Models,” [arXiv:2302.05543](https://arxiv.org/abs/2302.05543)
-
--   [Can Michael Hucko's 'sar2rgb' Repository](https://github.com/canmike/sar2rgb)
