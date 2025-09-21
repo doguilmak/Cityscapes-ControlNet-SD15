@@ -62,7 +62,7 @@ The model is optimized using a simple noise prediction objective from the diffus
 #### Training Details
 
 - **Data**:  
-  Each RGB image $x_0$ is paired with a segmentation map $c$. Both are resized to $512 \times 512$ and normalized to the $[-1, 1]$ range, using the following transformation:
+  Each RGB image $x_0$ is paired with a segmentation map $c$. Both are resized to $256 \times 256$ and normalized to the $[-1, 1]$ range, using the following transformation:
 
 $$
 x' = \frac{x}{127.5} - 1 \quad \text{where} \quad x \ \text{is the original pixel value in} \ [0, 255].
