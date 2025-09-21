@@ -59,10 +59,10 @@ The training is performed on the **Cityscapes dataset**, where each image is pai
 
 The model is optimized using a simple noise prediction objective from the diffusion framework, aiming to learn the mapping from segmentation-guided latent noise to clean latent image representations.
 
-#### 🧾 Training Details
+#### Training Details
 
 - **Data**:  
-  Each RGB image $x_0$ is paired with a segmentation map $c$. Both are resized to $256 \times 256$ and normalized to the $[-1, 1]$ range, using the following transformation:
+  Each RGB image $x_0$ is paired with a segmentation map $c$. Both are resized to $512 \times 512$ and normalized to the $[-1, 1]$ range, using the following transformation:
 
 $$
 x' = \frac{x}{127.5} - 1 \quad \text{where} \quad x \ \text{is the original pixel value in} \ [0, 255].
@@ -86,13 +86,11 @@ x_t = \sqrt{\bar{\alpha}_t} \, x_0 + \sqrt{1 - \bar{\alpha}_t} \, \epsilon \quad
 $$
 
 - **Loss Function**:  
-  The training loss is the **Mean Squared Error (MSE)** between the predicted and actual noise at each timestep:
+  The training loss is the **Mean Squared Error (MSE)** between the predicted and actual noise at each timestep where $\epsilon_\theta$ is the predicted noise, $\epsilon$ is the actual noise sampled from a standard normal distribution, and $\theta$ are the trainable parameters of ControlNet. The loss is normalized by the number of gradient accumulation steps:
 
 $$
 \mathcal{L} = \mathbb{E}_{t, x_0, \epsilon, c} \left[ \left\| \epsilon - \epsilon_\theta (x_t, t, c) \right\|^2 \right]
 $$
-
-  where $\epsilon_\theta$ is the predicted noise, $\epsilon$ is the actual noise sampled from a standard normal distribution, and $\theta$ are the trainable parameters of ControlNet. The loss is normalized by the number of gradient accumulation steps.
 
 - **Optimization**:  
   The model is optimized using the **AdamW optimizer** with a **learning rate of $3.38 \times 10^{-8}$**. Training was performed with a **batch size of 32** and **gradient accumulation over 8 steps**, which effectively simulates a larger batch size of 256. Gradient clipping was applied with a **maximum norm of 1.0** to stabilize training. The model was trained for **50 epochs** using **3,475 image-mask pairs**, completing in approximately 2 hours on an **NVIDIA A100 40GB GPU**.
